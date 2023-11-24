@@ -1,0 +1,12 @@
+.w-forms {
+  position: relative;
+  margin: 0;
+  &__title {
+    display: block;
+    font-size: var(--fs)8px;
+    font-weight: var(--ff-bold);
+    color: var(--c-text-primary);
+    text-align: center;
+    margin-bottom: 25px;  
+  }
+}

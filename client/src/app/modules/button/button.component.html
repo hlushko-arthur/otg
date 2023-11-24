@@ -1,0 +1,19 @@
+<button
+	[ngClass]="{
+		'_primary' : type === types.PRIMARY,
+		'_secondary' : type === types.SECONDARY,
+		'_success' : type === types.SUCCESS,
+		'_danger' : type === types.DANGER,
+		'_warning' : type === types.WARNING,
+		'_info' : type === types.INFO,
+		'_light' : type === types.LIGHT,
+		'_dark' : type === types.DARK,
+		'_link' : type === types.LINK
+	}"
+	[type]="click || disableSubmit ? 'button' : 'submit'"
+	[disabled]="disabled"
+	(click)="clicked()"
+	class="w-btn"
+>
+	<ng-content></ng-content>
+</button>

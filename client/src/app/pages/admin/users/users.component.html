@@ -1,0 +1,11 @@
+<!--==== Table Module ====-->
+<wtable [columns]="columns" [config]="config" [rows]="us.users">
+	<ng-template *ngFor="let role of us.roles" [cell]="role" let-element>
+		<winput
+			(wChange)="element.is[role] = $event; us.save(element)"
+			[type]="inputTypes.CHECKBOX"
+			[set]="element.is[role]"
+		></winput>
+	</ng-template>
+</wtable>
+<!-- ==================== -->
