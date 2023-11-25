@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Post } from 'src/app/core/interfaces/post.interface';
 import { PostService } from 'src/app/core/services/post.service';
 
@@ -8,12 +8,10 @@ import { PostService } from 'src/app/core/services/post.service';
 	styleUrls: ['./general.component.scss']
 })
 export class GeneralComponent implements OnInit {
-	posts: Post[];
-	constructor(private _post: PostService) { }
+	@Input() posts!: Post[];
+	constructor() { }
 
 	ngOnInit(): void {
-		this._post.get('general').then((posts: Post[]) => {
-			this.posts = posts;
-		});
+
 	}
 }

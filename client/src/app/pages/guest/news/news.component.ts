@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Post } from 'src/app/core/interfaces/post.interface';
 
 @Component({
   selector: 'app-news',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./news.component.scss']
 })
 export class NewsComponent {
+
+  @Input() posts!: Post[];
 
 }

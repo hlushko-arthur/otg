@@ -69,12 +69,18 @@
 
 	<div class="right-block">
 		<admin-panel class="w100" *ngIf="isAdmin()"></admin-panel>
-		<app-general *ngIf="tab === 'general'"></app-general>
-		<app-news *ngIf="tab === 'news'"></app-news>
-		<app-photos *ngIf="tab === 'photos'"></app-photos>
-		<app-contacts *ngIf="tab === 'contacts'"></app-contacts>
-		<app-announcement *ngIf="tab === 'announcement'"></app-announcement>
-		<app-public-info *ngIf="tab === 'publicInfo'"></app-public-info>
+		<app-general [posts]="posts" *ngIf="tab === 'general'"></app-general>
+		<app-news [posts]="posts" *ngIf="tab === 'news'"></app-news>
+		<app-photos [posts]="posts" *ngIf="tab === 'photos'"></app-photos>
+		<app-contacts [posts]="posts" *ngIf="tab === 'contacts'"></app-contacts>
+		<app-announcement
+			[posts]="posts"
+			*ngIf="tab === 'announcement'"
+		></app-announcement>
+		<app-public-info
+			[posts]="posts"
+			*ngIf="tab === 'publicInfo'"
+		></app-public-info>
 	</div>
 </main>
 <footer></footer>
