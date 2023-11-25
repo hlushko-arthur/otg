@@ -10,18 +10,4 @@
 		border: 1px solid black;
 		margin-bottom: 10px;
 	}
-
-	.tinymce-container {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		align-items: end;
-		.tinymce {
-			margin-bottom: 10px;
-			width: 100%;
-		}
-	}
-	.btn_send {
-		margin-top: 10px;
-	}
 }

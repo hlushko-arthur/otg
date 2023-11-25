@@ -1,0 +1,10 @@
+.modal-container {
+	padding-top: 15px;
+	display: flex;
+	flex-direction: column;
+
+	.btn {
+		margin-top: 15px;
+		align-self: center;
+	}
+}

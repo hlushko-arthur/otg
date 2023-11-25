@@ -10,6 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AdminPanelComponent } from './core/components/admin-panel/admin-panel.component';
 import { NgxTinymceModule } from 'ngx-tinymce';
 import { PostsComponent } from './core/components/posts/posts.component';
+import { WacomModule } from 'wacom';
+import { CreatePostComponent } from './core/modals/create-post/create-post.component';
 
 const routes: Routes = [{
 	path: '',
@@ -26,7 +28,8 @@ const routes: Routes = [{
 		MainComponent,
 		SignComponent,
 		AdminPanelComponent,
-		PostsComponent
+		PostsComponent,
+		CreatePostComponent
 	],
 	imports: [
 		BrowserModule,
@@ -38,6 +41,13 @@ const routes: Routes = [{
 		HttpClientModule,
 		NgxTinymceModule.forRoot({
 			baseURL: '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.7.1/'
+		}),
+		WacomModule.forRoot({
+			modal: {
+				modals: {
+					createPost: CreatePostComponent
+				}
+			}
 		})
 	],
 	providers: [],

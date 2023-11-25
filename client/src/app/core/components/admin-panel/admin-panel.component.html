@@ -1,15 +1,3 @@
 <div class="panel-container">
-	<button (click)="isAddNewPost = !isAddNewPost" class="new-post">
-		{{isAddNewPost ? '-' : '+'}}
-	</button>
-	<div *ngIf="isAddNewPost" class="tinymce-container">
-		<tinymce
-			class="tinymce"
-			[config]="tinyConfig"
-			[(ngModel)]="content"
-		></tinymce>
-		<button (click)="createPost()" class="btn btn_send">
-			Створити новий пост
-		</button>
-	</div>
+	<button (click)="openCreatePostModal()" class="new-post">+</button>
 </div>
