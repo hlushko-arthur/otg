@@ -1,0 +1,15 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	&_field {
+		display: flex;
+		flex-direction: column;
+		width: 300px;
+		margin-bottom: 10px;
+		justify-content: center;
+	}
+
+}

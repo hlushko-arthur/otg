@@ -1,0 +1,13 @@
+<div class="form">
+	<div class="form_field">
+		Логін
+		<input [(ngModel)]="user.login" type="text">
+	</div>
+	<div class="form_field">
+		Пароль
+		<input [(ngModel)]="user.password" type="password">
+	</div>
+	<div class="form_field">
+		<button [disabled]="!user.password || !user.login" (click)="submit()">Увійти</button>
+	</div>
+</div>

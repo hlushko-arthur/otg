@@ -1,0 +1,78 @@
+header {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	background: linear-gradient(0deg, #325f9b 0%, #25466d 100%);
+	color: #fff;
+	padding: 10px;
+	.header-container {
+		display: flex;
+		justify-content: center;
+		&:first-child {
+			justify-content: space-between;
+		}
+		&:last-child {
+			justify-content: flex-start;
+			margin-bottom: -25px;
+		}
+		.logo-gov {
+			&_title {
+				font-weight: 600;
+			}
+		}
+		&_title {
+			font-weight: 600;
+			font-size: 180%;
+		}
+
+		nav {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+		}
+
+		ul {
+			display: flex;
+			justify-content: space-between;
+			list-style-type: none;
+			padding: 0;
+			// margin-left: -50px;
+
+			li {
+				padding: 15px;
+				cursor: pointer;
+			}
+
+			li:hover {
+				transition: 0.2s;
+				background-color: rgba(0, 0, 0, 0.2);
+				border-radius: 10px 10px 0 0;
+			}
+		}
+	}
+}
+
+main {
+	display: flex;
+	.left-block {
+		width: 300px;
+
+		li {
+			list-style-type: none;
+			padding: 10px;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+			cursor: pointer;
+
+			&:hover {
+				transition: 0.2s;
+				background-color: rgba(0, 0, 0, 0.1);
+			}
+		}
+	}
+	.right-block {
+		width: 100%;
+		display: flex;
+		padding: 20px;
+		flex-direction: column;
+	}
+}

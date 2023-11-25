@@ -1,172 +1,213 @@
-import {
-	Any,
-	MongoService,
-	FileService,
-	HttpService,
-	AlertService,
-	CoreService
-} from 'wacom';
+import { AlertService } from 'wacom';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { User } from 'src/app/core';
-
-interface AnyUser {
-	[key: string]: User;
-}
+import { User } from '../interfaces/user.interface';
+import { HttpService } from './http.service';
+import {
+	ServerResponse,
+	ServerResponseError
+} from '../interfaces/server.interface';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class UserService {
-	user: User = this.new();
-
-	roles = ['admin'];
-
-	role(role: string): boolean {
-		return !!this.user.is[role];
-	}
+	user: User = {
+		admin: false
+	} as User;
 
 	users: User[] = [];
 
-	_users: AnyUser = {};
+	// _users:  = {};
 
 	constructor(
 		private _alert: AlertService,
-		private _mongo: MongoService,
-		private _http: HttpService,
-		private _file: FileService,
-		private _core: CoreService,
-		private _router: Router
+		private _router: Router,
+		private _http: HttpService
 	) {
-		this._file.add({
-			id: 'userAvatarUrl',
-			resize: 256,
-			part: 'user',
-			cb: (file: string | File) => {
-				if (typeof file != 'string') return;
-
-				this.user.thumb = file;
-			}
-		});
-
-		this._mongo.config('user', {
-			replace: {
-				data: (data: Any, cb: (data: Any) => Any) => {
-					if (typeof data != 'object') data = {};
-
-					cb(data);
-				},
-				is: this._mongo.beObj
-			}
-		});
-
-		if (localStorage.getItem('waw_user')) {
-			this.user = JSON.parse(localStorage.getItem('waw_user') as string);
-
-			this._core.done('us.user');
-
-			this.load();
-		}
+		this.user = JSON.parse(
+			(localStorage.getItem('user') as string) || '{}'
+		);
 	}
 
 	load(): void {
-		this.user = this._mongo.fetch(
-			'user',
-			{
-				name: 'me'
-			},
-			(user: User) => {
-				if (user) {
-					this.user = user;
-
-					this._core.done('us.user');
-
-					localStorage.setItem('waw_user', JSON.stringify(user));
-				} else {
-					this.logout();
-				}
-			}
-		);
-
-		this.users = this._mongo.get('user', (users: User[], obj: AnyUser) => {
-			this._users = obj;
-		});
-	}
-
-	new(): User {
-		return {
-			name: '',
-			email: '',
-			thumb: '',
-			is: {},
-			data: {}
-		};
-	}
-
-	create(user: User): void {
-		this._mongo.create('user', user);
-	}
-
-	doc(userId: string): User {
-		if (!this._users[userId]) {
-			this._users[userId] = this._mongo.fetch('user', {
-				query: { _id: userId }
-			});
-		}
-
-		return this._users[userId];
-	}
-
-	update(): void {
-		this._mongo.afterWhile(this, () => {
-			localStorage.setItem('waw_user', JSON.stringify(this.user));
-
-			this._mongo.update('user', this.user);
-		});
-	}
-
-	save(user: User): void {
-		this._mongo.afterWhile(this, () => {
-			this._mongo.update('user', user, {
-				name: 'admin'
-			});
-		});
-	}
-
-	delete(user: User): void {
-		this._mongo.delete('user', user, {
-			name: 'admin'
-		});
-	}
-
-	change_password(oldPass: string, newPass: string): void {
-		this._http.post(
-			'/api/user/changePassword',
-			{
-				newPass: newPass,
-				oldPass: oldPass
-			},
-			(resp: boolean) => {
+		this._http
+			.get('/api/user/get')
+			.then((resp) => {
 				if (resp) {
-					this._alert.info({
-						text: 'Successfully changed password'
+					this.users = resp.data as User[];
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
+
+	async fetch(_id: string): Promise<User> {
+		let user = {} as User;
+
+		await this._http
+			.get(`/api/user/fetch/${_id}`)
+			.then((resp: ServerResponse) => {
+				user = resp.data as User;
+			});
+
+		return user;
+	}
+
+	signup(payload: object): void {
+		this._http.post('/api/user/sign', payload).then((resp: any) => {
+			if (!resp) {
+				this._alert.error({
+					text: 'Цей email вже використовується'
+				});
+			} else {
+				this._setAuthorizedUser(resp as User & { token: string });
+			}
+		});
+	}
+
+	login(payload: object): void {
+		this._http.post('/api/user/login', payload).then((resp: any) => {
+			if (!resp) {
+				this._alert.warning({
+					text: 'Пароль або емейл введено невірно'
+				});
+			} else {
+				this._setAuthorizedUser(resp as User & { token: string });
+			}
+		});
+	}
+
+	update(user: User): any {
+		this._alert.destroy();
+
+		this._alert.info({
+			text: 'Profile is updating...'
+		});
+
+		return this._http
+			.post('/api/user/update', user)
+			.then((resp: ServerResponse | ServerResponseError) => {
+				if (resp.status) {
+					this._alert.destroy();
+
+					this._alert.success({
+						text: 'Profile has been succesfully updated'
 					});
 				} else {
+					this._handleError(resp as ServerResponseError);
+				}
+			})
+			.catch(this._handleError);
+	}
+
+	resetPassword(email: string): void {
+		this._http
+			.post('/api/user/resetPassword', {
+				email
+			})
+			.then(
+				(resp) => {
+					if (resp) {
+						this._alert.info({
+							text: `Код надісланий на пошту ${email}`
+						});
+					}
+				},
+				() => {
 					this._alert.error({
-						text: 'Failed to change password'
+						text: 'Щось пішло не так, спробуйте пізніше'
 					});
 				}
-			}
-		);
+			);
+	}
+
+	async checkResetPin(email: string, resetPin: string): Promise<boolean> {
+		return await this._http
+			.post('/api/user/checkResetPin', {
+				email,
+				resetPin
+			})
+			.then((resp) => {
+				return resp as boolean;
+			})
+			.catch(() => {
+				return false;
+			});
+	}
+
+	async changePassword(email: string, password: string): Promise<boolean> {
+		return await this._http
+			.post('/api/user/changePassword', {
+				email,
+				password
+			})
+			.then((resp) => {
+				return resp as boolean;
+			})
+			.catch(() => {
+				return false;
+			});
+	}
+
+	async uploadImage(
+		file: File,
+		type: 'avatar' | 'document',
+		userId: string
+	): Promise<any> {
+		const formData: FormData = new FormData();
+
+		formData.append('file', file, file.name);
+
+		formData.append('type', type);
+
+		formData.append('_id', userId);
+
+		return await new Promise((resolve, reject) => {
+			this._http
+				.post(
+					`/api/user/upload${type
+						.charAt(0)
+						.toUpperCase()}${type.substring(1)}`,
+					formData
+				)
+				.then(
+					(response) => {
+						resolve(response);
+					},
+					(error) => {
+						reject(error);
+					}
+				);
+		});
 	}
 
 	logout(): void {
-		this.user = this.new();
+		localStorage.removeItem('user');
 
-		localStorage.removeItem('waw_user');
+		this._router.navigateByUrl('/');
+	}
 
-		this._router.navigateByUrl('/sign');
+	private _setAuthorizedUser(user: User & { token?: string }): void {
+		const cookieValue = `Authorization=${user.token as string}; path=/`;
 
-		this._http.remove('token');
+		document.cookie = cookieValue;
+
+		delete user.token;
+
+		this.user = user;
+
+		localStorage.setItem('user', JSON.stringify(user));
+
+		this._router.navigateByUrl('/');
+	}
+
+	private _handleError(err: { message: string }): void {
+		this._alert.destroy();
+
+		this._alert.warning({
+			text: `Something went wrong. ${err.message}`
+		});
 	}
 }
