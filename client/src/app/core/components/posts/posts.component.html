@@ -1,9 +1,24 @@
 <div class="post-container">
 	<ng-container *ngFor="let post of posts">
-		<div class="post" [innerHTML]="post.content"></div>
-		<div>{{post.dateCreated}}</div>
-		<div (click)="deletePost(post)" *ngIf="isAdmin">
-			<img src="assets/icons/trash.png" alt="" />
+		<div class="post">
+			<div class="post_content" [innerHTML]="post.content"></div>
+			<div class="post_additional">
+				<div class="post_date">{{post.dateCreated | dateFormat}}</div>
+				<div class="post_actions" *ngIf="isAdmin">
+					<img
+						class="post_actions_action"
+						(click)="deletePost(post)"
+						src="assets/icons/trash.png"
+						alt="delete"
+					/>
+					<img
+						class="post_actions_action"
+						(click)="editPost(post)"
+						src="assets/icons/pencil.png"
+						alt="edit"
+					/>
+				</div>
+			</div>
 		</div>
 	</ng-container>
 </div>

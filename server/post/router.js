@@ -42,8 +42,6 @@ module.exports = async waw => {
 
 	router.get('/get/:tab', async (req, res) => {
 		try {
-			await isAuthorized(req, res);
-
 			const posts = await Post.find({
 				type: req.params.tab
 			});
@@ -67,6 +65,27 @@ module.exports = async waw => {
 			}
 
 			res.status(200).json({ status: true, message: 'Post deleted successfully' });
+		} catch (error) {
+			res.status(500).json({ status: false, message: error.message });
+		}
+	})
+
+	router.post('/update', async (req, res) => {
+		try {
+			await isAuthorized(req, res);
+
+			const updatedPost = await Post.updateOne({ _id: req.body._id }, {
+				content: req.body.content
+			});
+
+			if (updatedPost.n === 0) {
+				return res.status(404).json({ status: false, message: 'Post not found' });
+			}
+
+			res.status(200).json({
+				status: true,
+				data: [updatedPost],
+			});
 		} catch (error) {
 			res.status(500).json({ status: false, message: error.message });
 		}

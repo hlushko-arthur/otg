@@ -12,6 +12,7 @@ import { NgxTinymceModule } from 'ngx-tinymce';
 import { PostsComponent } from './core/components/posts/posts.component';
 import { WacomModule } from 'wacom';
 import { CreatePostComponent } from './core/modals/create-post/create-post.component';
+import { DateFormatPipe } from './core/pipes/date.pipe';
 
 const routes: Routes = [{
 	path: '',
@@ -29,7 +30,8 @@ const routes: Routes = [{
 		SignComponent,
 		AdminPanelComponent,
 		PostsComponent,
-		CreatePostComponent
+		CreatePostComponent,
+		DateFormatPipe
 	],
 	imports: [
 		BrowserModule,
@@ -48,7 +50,7 @@ const routes: Routes = [{
 					createPost: CreatePostComponent
 				}
 			}
-		})
+		}),
 	],
 	providers: [],
 	bootstrap: [AppComponent],

@@ -1,11 +1,11 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
 @Component({
 	templateUrl: './create-post.component.html',
 	styleUrls: ['./create-post.component.scss']
 })
 
-export class CreatePostComponent {
+export class CreatePostComponent implements OnInit {
 	tinyConfig = {
 		toolbar1: 'styleselect bullist numlist  preview fullscreen',
 		toolbar2: 'undo redo forecolor backcolor bold italic alignleft aligncenter alignright alignjustify outdent indent link image  emoticons code table',
@@ -42,9 +42,15 @@ export class CreatePostComponent {
 
 	content = '';
 
+	isEdit = false;
+
 	close: () => void;
 
 	onChange: (content: string) => void;
+
+	ngOnInit(): void {
+		this.isEdit = !!this.content;
+	}
 
 	createPost(): void {
 		this.onChange(this.content);

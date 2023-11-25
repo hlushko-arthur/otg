@@ -1,8 +1,25 @@
 .post-container {
 	width: 100%;
-	// white-space: pre-line;
-	word-break: break-all;
 	.post {
-		word-break: break-all;
+		border-bottom: 1px solid black;
+		&_additional {
+			display: flex;
+			justify-content: space-between;
+		}
+
+		&_date {
+			font-size: 10px;
+			color: rgba(0, 0, 0, 0.5);
+		}
+
+		&_actions {
+			&_action {
+				height: 16px;
+				width: 16px;
+				&:not(:last-child) {
+					margin-right: 10px;
+				}
+			}
+		}
 	}
 }

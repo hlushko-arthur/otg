@@ -1,5 +1,7 @@
 <div class="modal-container">
 	<tinymce [config]="tinyConfig" [(ngModel)]="content"></tinymce>
 
-	<div (click)="createPost()" class="btn">Створити пост</div>
+	<div (click)="createPost()" class="btn">
+		{{isEdit ? 'Редагувати' : 'Створити'}} пост
+	</div>
 </div>

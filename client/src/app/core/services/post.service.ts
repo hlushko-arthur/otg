@@ -50,13 +50,26 @@ export class PostService {
 	}
 
 	async delete(post: Post): Promise<void> {
-		await this._http.post('/api/post/delete/', {
+		await this._http.post('/api/post/delete', {
 			_id: post._id
 		}).then((resp: ServerResponse) => {
 			if (resp.status) {
 				const postIndex = this.posts[post.type].findIndex((_post) => _post._id == post._id);
 
 				this.posts[post.type].splice(postIndex, 1);
+			}
+		})
+	}
+
+	async update(post: Post): Promise<void> {
+		await this._http.post('/api/post/update', {
+			_id: post._id,
+			content: post.content
+		}).then((resp: ServerResponse) => {
+			if (resp.status) {
+				this._alert.success({
+					text: 'Пост успішно оновлено'
+				})
 			}
 		})
 	}
