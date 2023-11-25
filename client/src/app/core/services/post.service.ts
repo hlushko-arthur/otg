@@ -7,7 +7,7 @@ import {
 	ServerResponse,
 	ServerResponseError
 } from '../interfaces/server.interface';
-import { Post } from '../interfaces/post.interface';
+import { NewPost, Post } from '../interfaces/post.interface';
 
 @Injectable({
 	providedIn: 'root'
@@ -25,9 +25,19 @@ export class PostService {
 
 	}
 
-	async create(post: Post): Promise<void> {
+	async create(post: NewPost): Promise<void> {
 		await this._http.post('/api/post/create', post).then((resp: ServerResponse) => {
-			console.log(resp);
+			if (resp.status) {
+				const post = (resp.data as Post[])[0] as Post;
+				if (!this.posts[post.type]) {
+					this.posts[post.type] = [];
+				}
+
+				this.posts[post.type].unshift(post);
+
+				console.log(this.posts);
+
+			}
 		})
 	}
 
@@ -37,6 +47,18 @@ export class PostService {
 		})
 
 		return this.posts[tab];
+	}
+
+	async delete(post: Post): Promise<void> {
+		await this._http.post('/api/post/delete/', {
+			_id: post._id
+		}).then((resp: ServerResponse) => {
+			if (resp.status) {
+				const postIndex = this.posts[post.type].findIndex((_post) => _post._id == post._id);
+
+				this.posts[post.type].splice(postIndex, 1);
+			}
+		})
 	}
 
 	private _handleError(err: { message: string }): void {

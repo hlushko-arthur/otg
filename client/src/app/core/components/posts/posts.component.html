@@ -1,15 +1,9 @@
-<div class="panel-container">
-	<button (click)="isAddNewPost = !isAddNewPost" class="new-post">
-		{{isAddNewPost ? '-' : '+'}}
-	</button>
-	<div *ngIf="isAddNewPost || true" class="tinymce-container">
-		<tinymce
-			class="tinymce"
-			[config]="tinyConfig"
-			[(ngModel)]="content"
-		></tinymce>
-		<button (click)="createPost()" class="btn btn_send">
-			Створити новий пост
-		</button>
-	</div>
+<div class="post-container">
+	<ng-container *ngFor="let post of posts">
+		<div class="post" [innerHTML]="post.content"></div>
+		<div>{{post.dateCreated}}</div>
+		<div (click)="deletePost(post)" *ngIf="isAdmin">
+			<img src="assets/icons/trash.png" alt="" />
+		</div>
+	</ng-container>
 </div>

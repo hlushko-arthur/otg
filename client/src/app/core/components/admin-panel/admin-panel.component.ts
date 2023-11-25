@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { PostService } from "../../services/post.service";
 import { ActivatedRoute } from "@angular/router";
 import * as moment from "moment";
-import { Post } from "../../interfaces/post.interface";
+import { NewPost } from "../../interfaces/post.interface";
 
 @Component({
 	selector: 'admin-panel',
@@ -51,7 +51,7 @@ export class AdminPanelComponent {
 
 	createPost(): void {
 
-		const post: Post = {
+		const post: NewPost = {
 			type: this._activatedRoute.snapshot.queryParams['tab'],
 			content: this.content,
 			dateCreated: moment().format('YYYY-MM-DD')

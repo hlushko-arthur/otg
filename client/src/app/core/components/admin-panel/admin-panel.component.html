@@ -2,7 +2,7 @@
 	<button (click)="isAddNewPost = !isAddNewPost" class="new-post">
 		{{isAddNewPost ? '-' : '+'}}
 	</button>
-	<div *ngIf="isAddNewPost || true" class="tinymce-container">
+	<div *ngIf="isAddNewPost" class="tinymce-container">
 		<tinymce
 			class="tinymce"
 			[config]="tinyConfig"

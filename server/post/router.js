@@ -1,10 +1,6 @@
 const Post = require('./schema');
-const { v4: uuidv4 } = require('uuid');
 const mongoose = require('mongoose');
 const nJwt = require('njwt');
-const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
 
 module.exports = async waw => {
 	if (!waw.config.signingKey) {
@@ -32,15 +28,48 @@ module.exports = async waw => {
 	*/
 	const router = waw.router('/api/post');
 
-	router.post('/create', (req, res) => {
-		Post.create(req.body);
+	router.post('/create', async (req, res) => {
+		try {
+			await isAuthorized(req, res);
+
+			const createdPost = await Post.create(req.body);
+
+			res.status(200).json({ status: true, data: [createdPost] });
+		} catch (error) {
+			res.status(500).json({ status: false, message: error.message });
+		}
 	})
 
 	router.get('/get/:tab', async (req, res) => {
-		const posts = await Post.find({
-			type: req.params.tab
-		});
-		res.status(200).json({ status: 200, data: posts });
+		try {
+			await isAuthorized(req, res);
+
+			const posts = await Post.find({
+				type: req.params.tab
+			});
+
+			res.status(200).json({ status: true, data: (posts || []).reverse() });
+		} catch (error) {
+			res.status(500).json({ status: false, message: error.message });
+		}
+	})
+
+	router.post('/delete', async (req, res) => {
+		try {
+			await isAuthorized(req, res);
+
+			const deletedPost = await Post.findOneAndDelete({
+				_id: req.body._id
+			});
+
+			if (!deletedPost) {
+				return res.status(404).json({ status: false, message: 'Post not found' });
+			}
+
+			res.status(200).json({ status: true, message: 'Post deleted successfully' });
+		} catch (error) {
+			res.status(500).json({ status: false, message: error.message });
+		}
 	})
 
 	waw.use((req, res, next) => {
@@ -49,5 +78,28 @@ module.exports = async waw => {
 		next();
 	});
 
+	const isAuthorized = async (req, res) => {
+		if (!req.cookies.Authorization) {
+			throw new Error('Unauthorized');
+		}
+
+		try {
+			await new Promise((resolve, reject) => {
+				nJwt.verify(req.cookies.Authorization, waw.config.signingKey, (err) => {
+					if (err) {
+						if (err.message === 'Jwt is expired') {
+							return reject(new Error('Token expired'));
+						} else {
+							return reject(new Error('Invalid token'));
+						}
+					}
+
+					resolve();
+				});
+			});
+		} catch (error) {
+			throw new Error(error.message || 'Invalid token');
+		}
+	};
 
 };
