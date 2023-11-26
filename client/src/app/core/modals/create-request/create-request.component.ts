@@ -15,14 +15,10 @@ export class CreateRequestComponent {
 
 	close: () => void;
 
-	constructor(private _rs: RequestService, private _us: UserService) { }
+	constructor(private _rs: RequestService) { }
 
 	get isButtonDisabled(): boolean {
 		return !this.request.fullName || !this.request.email || !this.request.phone || !this.request.text || !this.request.isAgree;
-	}
-
-	get isAuthorized(): boolean {
-		return !!this._us.user.login;
 	}
 
 	async createRequest(): Promise<void> {

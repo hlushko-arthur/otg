@@ -27,7 +27,7 @@ module.exports = async waw => {
 
 	router.post('/create', async (req, res) => {
 		try {
-			await isAuthorized(req, res);
+			await verifyAccess(req, res);
 
 			const createdPost = await Post.create(req.body);
 
@@ -51,7 +51,7 @@ module.exports = async waw => {
 
 	router.post('/delete', async (req, res) => {
 		try {
-			await isAuthorized(req, res);
+			await verifyAccess(req, res);
 
 			const deletedPost = await Post.findOneAndDelete({
 				_id: req.body._id
@@ -69,7 +69,7 @@ module.exports = async waw => {
 
 	router.post('/update', async (req, res) => {
 		try {
-			await isAuthorized(req, res);
+			await verifyAccess(req, res);
 
 			const updatedPost = await Post.updateOne({ _id: req.body._id }, {
 				content: req.body.content
@@ -94,7 +94,7 @@ module.exports = async waw => {
 		next();
 	});
 
-	const isAuthorized = async (req, res) => {
+	const verifyToken = async (req, res) => {
 		if (!req.cookies.Authorization) {
 			throw new Error('Unauthorized');
 		}
@@ -118,4 +118,15 @@ module.exports = async waw => {
 		}
 	};
 
+	const verifyAccess = async (req, res) => {
+		await verifyToken(req, res);
+
+		const jwt = nJwt.verify(req.cookies.Authorization, waw.config.signingKey);
+
+		if (jwt.body.admin) {
+			return true;
+		} else {
+			throw new Error('No Access');
+		}
+	}
 };

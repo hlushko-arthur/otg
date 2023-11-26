@@ -1,0 +1,16 @@
+<header>
+	<nav class="nav">
+		<div
+			[class.active]="activeTab === 'requests'"
+			(click)="activeTab = 'requests'"
+			class="nav_item"
+		>
+			Звернення
+		</div>
+	</nav>
+</header>
+<main>
+	<div>
+		<admin-requests *ngIf="activeTab === 'requests'"></admin-requests>
+	</div>
+</main>

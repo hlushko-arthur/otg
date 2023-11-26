@@ -6,12 +6,12 @@ import { NewPost } from "../../interfaces/post.interface";
 import { ModalService } from "wacom";
 
 @Component({
-	selector: 'admin-panel',
-	templateUrl: './admin-panel.component.html',
-	styleUrls: ['./admin-panel.component.scss'],
+	selector: 'post-panel',
+	templateUrl: './post-panel.component.html',
+	styleUrls: ['./post-panel.component.scss'],
 })
 
-export class AdminPanelComponent {
+export class PostPanelComponent {
 	isAddNewPost = false;
 
 	constructor(private _post: PostService, private _activatedRoute: ActivatedRoute, private _modal: ModalService) { }

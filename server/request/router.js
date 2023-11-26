@@ -1,5 +1,6 @@
 const Request = require('./schema');
 const mongoose = require('mongoose');
+const nJwt = require('njwt');
 
 module.exports = async waw => {
 	if (!waw.config.signingKey) {
@@ -26,7 +27,7 @@ module.exports = async waw => {
 
 	router.post('/create', async (req, res) => {
 		try {
-			await Request.create(req.body);
+			await Request.create({ ...req.body, status: 0 });
 
 			res.status(200).json({ status: true });
 		} catch (error) {
@@ -36,6 +37,8 @@ module.exports = async waw => {
 
 	router.get('/get', async (req, res) => {
 		try {
+			await verifyAccess(req, res);
+
 			const requests = await Request.find();
 
 			res.status(200).json({ status: true, data: (requests || []).reverse() });
@@ -46,7 +49,7 @@ module.exports = async waw => {
 
 	router.post('/delete', async (req, res) => {
 		try {
-			await isAuthorized(req, res);
+			await verifyAccess(req, res);
 
 			const deletedRequest = await Request.findOneAndDelete({
 				_id: req.body._id
@@ -62,12 +65,12 @@ module.exports = async waw => {
 		}
 	})
 
-	router.post('/update', async (req, res) => {
+	router.post('/changeStatus', async (req, res) => {
 		try {
-			await isAuthorized(req, res);
+			await verifyAccess(req, res);
 
-			const updatedPost = await Request.updateOne({ _id: req.body._id }, {
-				content: req.body.content
+			const updatedRequest = await Request.updateOne({ _id: req.body._id }, {
+				status: req.body.status
 			});
 
 			if (updatedRequest.n === 0) {
@@ -76,7 +79,7 @@ module.exports = async waw => {
 
 			res.status(200).json({
 				status: true,
-				data: [updatedPost],
+				data: updatedRequest,
 			});
 		} catch (error) {
 			res.status(500).json({ status: false, message: error.message });
@@ -89,7 +92,7 @@ module.exports = async waw => {
 		next();
 	});
 
-	const isAuthorized = async (req, res) => {
+	const verifyToken = async (req, res) => {
 		if (!req.cookies.Authorization) {
 			throw new Error('Unauthorized');
 		}
@@ -113,4 +116,15 @@ module.exports = async waw => {
 		}
 	};
 
+	const verifyAccess = async (req, res) => {
+		await verifyToken(req, res);
+
+		const jwt = nJwt.verify(req.cookies.Authorization, waw.config.signingKey);
+
+		if (jwt.body.admin) {
+			return true;
+		} else {
+			throw new Error('No Access');
+		}
+	}
 };

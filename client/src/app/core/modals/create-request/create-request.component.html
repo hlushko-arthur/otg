@@ -48,15 +48,10 @@
 		<h3>Ваше звернення успішно було надіслано</h3>
 		<div>
 			<div>Очікуйте відповіді на вказаний email</div>
-			<span *ngIf="isAuthorized"
-				>Також ви можете переглянути свої звернення в особистому
-				кабінеті</span
-			>
 		</div>
 
 		<div class="info-message_btns">
 			<button (click)="close()" class="btn">Закрити</button>
-			<button *ngIf="isAuthorized" class="btn">Особистий кабінет</button>
 		</div>
 	</div>
 </div>

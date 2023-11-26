@@ -11,8 +11,9 @@
 
 		<div class="action-bar">
 			<div (click)="openSendRequestModal()">Надіслати звернення</div>
-			<div *ngIf="!isAuthorized" routerLink="/admin">Увійти</div>
+			<div *ngIf="!isAuthorized" routerLink="/sign">Увійти</div>
 			<div *ngIf="isAuthorized" (click)="logout()">Вийти</div>
+			<div *ngIf="isAdmin" routerLink="/admin">Панель адміна</div>
 		</div>
 	</div>
 
@@ -70,7 +71,7 @@
 	</div>
 
 	<div class="right-block">
-		<admin-panel class="w100" *ngIf="isAdmin"></admin-panel>
+		<post-panel class="w100" *ngIf="isAdmin"></post-panel>
 		<posts [posts]="posts"></posts>
 	</div>
 </main>

@@ -5,7 +5,8 @@ const schema = mongoose.Schema({
 	phone: String,
 	text: String,
 	dateCreated: String,
-	author: String
+	author: String,
+	status: Number
 }, {
 	minimize: false
 });

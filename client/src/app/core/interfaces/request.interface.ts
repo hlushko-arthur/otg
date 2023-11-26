@@ -9,4 +9,5 @@ export interface NewRequest {
 
 export interface Request extends NewRequest {
 	_id: string;
+	status: 0 | 1 | 2;
 }

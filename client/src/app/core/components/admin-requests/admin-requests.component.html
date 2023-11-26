@@ -1,0 +1,89 @@
+<div class="requests-container">
+	<div class="left-block">
+		<div
+			(click)="activeRequest = request"
+			[class.active]="activeRequest._id === request._id"
+			class="request-item"
+			*ngFor="let request of requests"
+		>
+			<div class="request-item_name">{{request.fullName}}</div>
+
+			<div class="request-item_footer">
+				<div class="request-item_date">
+					{{request.dateCreated | dateFormat}}
+				</div>
+
+				<div
+					[class._orange]="request.status === 1"
+					[class._green]="request.status === 2"
+					class="request-item_status"
+				>
+					{{requestStatus(request.status)}}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="right-block">
+		<div *ngIf="activeRequest._id" class="request">
+			<div class="request_header">
+				<div class="request_name">
+					<div>{{activeRequest.fullName}}</div>
+
+					<div>
+						<div>{{activeRequest.email}}</div>
+
+						<div>, {{activeRequest.phone}}</div>
+					</div>
+				</div>
+				<div>
+					<div class="request_date">
+						{{activeRequest.dateCreated | dateFormat}}
+					</div>
+					<div
+						[class._orange]="activeRequest.status === 1"
+						[class._green]="activeRequest.status === 2"
+						class="request_status"
+					>
+						{{requestStatus(activeRequest.status)}}
+					</div>
+				</div>
+			</div>
+
+			<div class="request_actions">
+				<button
+					*ngIf="activeRequest.status !== 2"
+					(click)="changeRequestStatus(activeRequest)"
+					class="btn"
+				>
+					{{activeRequest.status === 0 ? 'На розгляд' : 'Завершити'}}
+				</button>
+
+				<button (click)="deleteRequest(activeRequest)" class="btn">
+					Видалити
+				</button>
+
+				<button (click)="isShowAnswer = !isShowAnswer" class="btn">
+					{{isShowAnswer ? 'Відмінити' : 'Відповісти'}}
+				</button>
+
+				<button
+					(click)="sendAnswer(activeRequest)"
+					*ngIf="isShowAnswer"
+					class="btn"
+				>
+					Надіслати відповідь
+				</button>
+			</div>
+
+			<div class="request_text-container">
+				<div class="request_text">{{activeRequest.text}}</div>
+
+				<div *ngIf="isShowAnswer" class="request_footer">
+					<tinymce [config]="tinyConfig" class="tinymce"></tinymce>
+				</div>
+			</div>
+
+			<div class="request_footer"></div>
+		</div>
+	</div>
+</div>

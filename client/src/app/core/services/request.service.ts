@@ -13,6 +13,8 @@ export class RequestService {
 
 	requests: Request[] = [];
 
+	statuses = ['Новий', 'На розгляді', 'Завершений']
+
 	constructor(
 		private _alert: AlertService,
 		private _http: HttpService
@@ -45,6 +47,16 @@ export class RequestService {
 
 				this.requests.splice(requestIndex, 1);
 			}
+		})
+	}
+
+	async changeStatus(request: Request): Promise<void> {
+		const newStatus = request.status === 0 ? 1 : 2;
+		await this._http.post('/api/request/changeStatus', {
+			_id: request._id,
+			status: newStatus
+		}).then((resp: ServerResponse) => {
+			request.status = newStatus;
 		})
 	}
 

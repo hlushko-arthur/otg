@@ -3,5 +3,6 @@
 	"name": "Request",
 	"router": "router.js",
 	"dependencies": {
+		"njwt": "*"
 	}
 }
