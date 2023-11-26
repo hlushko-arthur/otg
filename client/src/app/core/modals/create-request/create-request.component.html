@@ -1,0 +1,42 @@
+<div class="modal-container">
+	<div class="modal-title">
+		<h1>Надіслати звернення</h1>
+	</div>
+	<div class="form">
+		<div class="form_field">
+			<span>Прізвище, ім'я, по-батькові</span>
+			<input [(ngModel)]="request.fullName" class="input" type="text" />
+		</div>
+		<div class="form_field">
+			<span>Email</span>
+			<input [(ngModel)]="request.email" class="input" type="email" />
+		</div>
+		<div class="form_field">
+			<!-- <span>Телефон</span> -->
+			<!-- <input [(ngModel)]="request.phone" class="input" type="text" /> -->
+			<phone label="Телефон" [(phone)]="request.phone"></phone>
+		</div>
+		<div class="form_field">
+			<span>Повідомлення</span>
+			<textarea [(ngModel)]="request.text" cols="30" rows="10"></textarea>
+		</div>
+		<div class="form_field">
+			<label for="agree">
+				<input
+					[(ngModel)]="request.isAgree"
+					id="agree"
+					type="checkbox"
+				/>
+				Відповідно до ст. 11 Закону України "Про захист персональних
+				даних" надаю згоду на обробку та використання моїх персональних
+				даних для здійснення повноважень, пов'язаних із розглядом даного
+				запиту.
+			</label>
+		</div>
+		<div class="form_field">
+			<button [disabled]="isButtonDisabled" class="btn">
+				Надіслати звернення
+			</button>
+		</div>
+	</div>
+</div>

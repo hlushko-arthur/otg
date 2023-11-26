@@ -30,19 +30,6 @@ export class UserService {
 		);
 	}
 
-	load(): void {
-		this._http
-			.get('/api/user/get')
-			.then((resp) => {
-				if (resp) {
-					this.users = resp.data as User[];
-				}
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	}
-
 	async fetch(_id: string): Promise<User> {
 		let user = {} as User;
 
@@ -56,37 +43,37 @@ export class UserService {
 	}
 
 	signup(payload: object): void {
-		this._http.post('/api/user/sign', payload).then((resp: any) => {
-			if (!resp) {
+		this._http.post('/api/user/sign', payload).then((resp: ServerResponse) => {
+			if (!resp.status) {
 				this._alert.error({
 					text: 'Цей email вже використовується'
 				});
 			} else {
-				this._setAuthorizedUser(resp as User & { token: string });
+				this._setAuthorizedUser(resp.data as User & { token: string });
 			}
 		});
 	}
 
 	login(payload: object): void {
-		this._http.post('/api/user/login', payload).then((resp: any) => {
-			if (!resp) {
+		this._http.post('/api/user/login', payload).then((resp: ServerResponse) => {
+			if (!resp.status) {
 				this._alert.warning({
 					text: 'Пароль або емейл введено невірно'
 				});
 			} else {
-				this._setAuthorizedUser(resp as User & { token: string });
+				this._setAuthorizedUser(resp.data as User & { token: string });
 			}
 		});
 	}
 
-	update(user: User): any {
+	update(user: User): void {
 		this._alert.destroy();
 
 		this._alert.info({
 			text: 'Profile is updating...'
 		});
 
-		return this._http
+		this._http
 			.post('/api/user/update', user)
 			.then((resp: ServerResponse | ServerResponseError) => {
 				if (resp.status) {
@@ -102,16 +89,16 @@ export class UserService {
 			.catch(this._handleError);
 	}
 
-	resetPassword(email: string): void {
+	resetPassword(login: string): void {
 		this._http
 			.post('/api/user/resetPassword', {
-				email
+				login
 			})
 			.then(
 				(resp) => {
 					if (resp) {
 						this._alert.info({
-							text: `Код надісланий на пошту ${email}`
+							text: `Код надісланий на пошту ${login}`
 						});
 					}
 				},
@@ -123,70 +110,38 @@ export class UserService {
 			);
 	}
 
-	async checkResetPin(email: string, resetPin: string): Promise<boolean> {
+	async checkResetPin(login: string, resetPin: string): Promise<boolean> {
 		return await this._http
 			.post('/api/user/checkResetPin', {
-				email,
+				login,
 				resetPin
 			})
-			.then((resp) => {
-				return resp as boolean;
+			.then((resp: ServerResponse) => {
+				return resp.status as boolean;
 			})
 			.catch(() => {
 				return false;
 			});
 	}
 
-	async changePassword(email: string, password: string): Promise<boolean> {
+	async changePassword(login: string, password: string): Promise<boolean> {
 		return await this._http
 			.post('/api/user/changePassword', {
-				email,
+				login,
 				password
 			})
-			.then((resp) => {
-				return resp as boolean;
+			.then((resp: ServerResponse) => {
+				return resp.status as boolean;
 			})
 			.catch(() => {
 				return false;
 			});
-	}
-
-	async uploadImage(
-		file: File,
-		type: 'avatar' | 'document',
-		userId: string
-	): Promise<any> {
-		const formData: FormData = new FormData();
-
-		formData.append('file', file, file.name);
-
-		formData.append('type', type);
-
-		formData.append('_id', userId);
-
-		return await new Promise((resolve, reject) => {
-			this._http
-				.post(
-					`/api/user/upload${type
-						.charAt(0)
-						.toUpperCase()}${type.substring(1)}`,
-					formData
-				)
-				.then(
-					(response) => {
-						resolve(response);
-					},
-					(error) => {
-						reject(error);
-					}
-				);
-		});
 	}
 
 	logout(): void {
 		localStorage.removeItem('user');
 
-		this._router.navigateByUrl('/');
+		this.user = {} as User;
 	}
 
 	private _setAuthorizedUser(user: User & { token?: string }): void {

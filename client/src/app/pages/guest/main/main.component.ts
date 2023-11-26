@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from 'src/app/core/interfaces/post.interface';
 import { PostService } from 'src/app/core/services/post.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { ModalService } from 'wacom';
 
 @Component({
 	templateUrl: './main.component.html',
@@ -10,7 +11,7 @@ import { UserService } from 'src/app/core/services/user.service';
 })
 export class MainComponent implements OnInit {
 	tab = '';
-	constructor(private _router: Router, private _activatedRoute: ActivatedRoute, private _us: UserService, private _ps: PostService) { }
+	constructor(private _modal: ModalService, private _router: Router, private _activatedRoute: ActivatedRoute, private _us: UserService, private _ps: PostService) { }
 
 	ngOnInit(): void {
 		this.tab = this._activatedRoute.snapshot.queryParams['tab'];
@@ -34,11 +35,25 @@ export class MainComponent implements OnInit {
 		this._ps.get(this.tab);
 	}
 
-	isAdmin(): boolean {
+	logout(): void {
+		this._us.logout();
+	}
+
+	openSendRequestModal(): void {
+		this._modal.open({
+			component: 'createRequest'
+		})
+	}
+
+	get isAdmin(): boolean {
 		return this._us.user.admin;
 	}
 
 	get posts(): Post[] {
 		return this._ps.posts[this.tab] || [];
+	}
+
+	get isAuthorized(): boolean {
+		return !!this._us.user.login;
 	}
 }

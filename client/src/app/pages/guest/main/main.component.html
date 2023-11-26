@@ -9,8 +9,10 @@
 			<img src="assets/logo.png" alt="" />
 		</div>
 
-		<div>
-			<div>Надіслати звернення</div>
+		<div class="action-bar">
+			<div (click)="openSendRequestModal()">Надіслати звернення</div>
+			<div *ngIf="!isAuthorized" routerLink="/admin">Увійти</div>
+			<div *ngIf="isAuthorized" (click)="logout()">Вийти</div>
 		</div>
 	</div>
 
@@ -68,7 +70,7 @@
 	</div>
 
 	<div class="right-block">
-		<admin-panel class="w100" *ngIf="isAdmin()"></admin-panel>
+		<admin-panel class="w100" *ngIf="isAdmin"></admin-panel>
 		<posts [posts]="posts"></posts>
 	</div>
 </main>

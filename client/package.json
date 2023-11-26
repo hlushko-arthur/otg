@@ -14,7 +14,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^15.2.0",
-    "@angular/common": "^15.2.0",
+    "@angular/common": "^15.2.0", 
     "@angular/compiler": "^15.2.0",
     "@angular/core": "^15.2.0",
     "@angular/forms": "^15.2.0",
@@ -24,6 +24,7 @@
     "@types/socket.io-client": "^3.0.0",
     "material-icons": "^1.11.1",
     "moment": "^2.29.4",
+    "ngx-mask": "^15.1.5",
     "ngx-tinymce": "^15.0.1",
     "rxjs": "~7.5.0",
     "socket.io-client": "^4.5.1",

@@ -4,6 +4,7 @@ const schema = mongoose.Schema({
 	login: { type: String, unique: true, sparse: true, trim: true },
 	admin: Boolean,
 	password: String,
+	resetPin: String
 }, {
 	minimize: false
 });

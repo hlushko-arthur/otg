@@ -22,7 +22,15 @@
 	},
 	"user": {
 		"is": {
-			"admin": "ceo@webart.work"
+			"admin": "tafu.app@gmail.com"
+		}
+	},
+	"mail": {
+		"secure": false,
+		"from": "tafu.app@gmail.com",
+		"auth": {
+			"user": "tafu.app@gmail.com",
+			"pass": "dujeqdjggiumczct"
 		}
 	}
 }

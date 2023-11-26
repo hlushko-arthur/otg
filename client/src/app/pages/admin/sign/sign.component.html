@@ -1,13 +1,78 @@
-<div class="form">
-	<div class="form_field">
-		Логін
-		<input [(ngModel)]="user.login" type="text">
-	</div>
-	<div class="form_field">
-		Пароль
-		<input [(ngModel)]="user.password" type="password">
-	</div>
-	<div class="form_field">
-		<button [disabled]="!user.password || !user.login" (click)="submit()">Увійти</button>
+<div class="container">
+	<div class="form">
+		<ng-container *ngIf="!isRecoverPassword">
+			<div class="form_field">
+				<span>Логін</span>
+				<input
+					[class.err]="isErr['login'] || validateEmail()"
+					class="input"
+					[(ngModel)]="user.login"
+					(ngModelChange)="isErr['login'] = false"
+					type="text"
+				/>
+			</div>
+			<div class="form_field">
+				<span>Пароль</span>
+				<input
+					class="input"
+					[(ngModel)]="user.password"
+					type="password"
+				/>
+			</div>
+			<div class="form_field">
+				<div (click)="isLogin = !isLogin">
+					{{isLogin ? 'Зареєструватись' : 'Увійти' }}
+				</div>
+				<div (click)="recoverPassword()">Забули пароль?</div>
+			</div>
+			<div class="form_field">
+				<button
+					*ngIf="isLogin"
+					class="btn"
+					[disabled]="!user.password || !user.login || validateEmail()"
+					(click)="submitLogin()"
+				>
+					Увійти
+				</button>
+
+				<button
+					*ngIf="!isLogin"
+					class="btn"
+					[disabled]="!user.password || !user.login"
+					(click)="submitSignup()"
+				>
+					Зареєструватись
+				</button>
+			</div>
+		</ng-container>
+
+		<ng-container *ngIf="isRecoverPassword">
+			<div class="form_field">
+				Логін
+				<input class="input" [(ngModel)]="user.login" type="text" />
+			</div>
+			<div class="form_field">
+				Новий пароль
+				<input class="input" [(ngModel)]="user.password" type="text" />
+			</div>
+			<div class="form_field">
+				Код
+				<input
+					class="input"
+					[(ngModel)]="user.resetPin"
+					type="password"
+				/>
+			</div>
+			<div class="form_field"></div>
+			<div class="form_field">
+				<button
+					class="btn"
+					[disabled]="!user.password || !user.login || !user.resetPin"
+					(click)="submitRecoverPassword()"
+				>
+					Змінити пароль
+				</button>
+			</div>
+		</ng-container>
 	</div>
 </div>

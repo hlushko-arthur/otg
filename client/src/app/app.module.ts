@@ -13,6 +13,9 @@ import { PostsComponent } from './core/components/posts/posts.component';
 import { WacomModule } from 'wacom';
 import { CreatePostComponent } from './core/modals/create-post/create-post.component';
 import { DateFormatPipe } from './core/pipes/date.pipe';
+import { CreateRequestComponent } from './core/modals/create-request/create-request.component';
+import { PhoneComponent } from './core/components/phone/phone.component';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 const routes: Routes = [{
 	path: '',
@@ -31,7 +34,9 @@ const routes: Routes = [{
 		AdminPanelComponent,
 		PostsComponent,
 		CreatePostComponent,
-		DateFormatPipe
+		DateFormatPipe,
+		CreateRequestComponent,
+		PhoneComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -47,12 +52,15 @@ const routes: Routes = [{
 		WacomModule.forRoot({
 			modal: {
 				modals: {
-					createPost: CreatePostComponent
+					createPost: CreatePostComponent,
+					createRequest: CreateRequestComponent
 				}
 			}
 		}),
+		NgxMaskDirective,
+		NgxMaskPipe
 	],
-	providers: [],
+	providers: [provideNgxMask()],
 	bootstrap: [AppComponent],
 	exports: [MainComponent]
 })

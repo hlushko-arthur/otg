@@ -6,9 +6,6 @@
 		"bcrypt-nodejs": "*",
 		"nodemailer": "*",
 		"njwt": "*",
-		"uuid": "*",
-		"cookie-parser": "*",
-		"fs": "*",
-		"multer": "*"
+		"cookie-parser": "*"
 	}
 }
