@@ -1,6 +1,5 @@
-const Post = require('./schema');
+const Request = require('./schema');
 const mongoose = require('mongoose');
-const nJwt = require('njwt');
 
 module.exports = async waw => {
 	if (!waw.config.signingKey) {
@@ -23,27 +22,23 @@ module.exports = async waw => {
 		mongoose.Promise = global.Promise;
 	}
 
-	const router = waw.router('/api/post');
+	const router = waw.router('/api/request');
 
 	router.post('/create', async (req, res) => {
 		try {
-			await isAuthorized(req, res);
+			await Request.create(req.body);
 
-			const createdPost = await Post.create(req.body);
-
-			res.status(200).json({ status: true, data: [createdPost] });
+			res.status(200).json({ status: true });
 		} catch (error) {
 			res.status(500).json({ status: false, message: error.message });
 		}
 	})
 
-	router.get('/get/:tab', async (req, res) => {
+	router.get('/get', async (req, res) => {
 		try {
-			const posts = await Post.find({
-				type: req.params.tab
-			});
+			const requests = await Request.find();
 
-			res.status(200).json({ status: true, data: (posts || []).reverse() });
+			res.status(200).json({ status: true, data: (requests || []).reverse() });
 		} catch (error) {
 			res.status(500).json({ status: false, message: error.message });
 		}
@@ -53,15 +48,15 @@ module.exports = async waw => {
 		try {
 			await isAuthorized(req, res);
 
-			const deletedPost = await Post.findOneAndDelete({
+			const deletedRequest = await Request.findOneAndDelete({
 				_id: req.body._id
 			});
 
-			if (!deletedPost) {
-				return res.status(404).json({ status: false, message: 'Post not found' });
+			if (!deletedRequest) {
+				return res.status(404).json({ status: false, message: 'Request not found' });
 			}
 
-			res.status(200).json({ status: true, message: 'Post deleted successfully' });
+			res.status(200).json({ status: true, message: 'Request deleted successfully' });
 		} catch (error) {
 			res.status(500).json({ status: false, message: error.message });
 		}
@@ -71,12 +66,12 @@ module.exports = async waw => {
 		try {
 			await isAuthorized(req, res);
 
-			const updatedPost = await Post.updateOne({ _id: req.body._id }, {
+			const updatedPost = await Request.updateOne({ _id: req.body._id }, {
 				content: req.body.content
 			});
 
-			if (updatedPost.n === 0) {
-				return res.status(404).json({ status: false, message: 'Post not found' });
+			if (updatedRequest.n === 0) {
+				return res.status(404).json({ status: false, message: 'Request not found' });
 			}
 
 			res.status(200).json({

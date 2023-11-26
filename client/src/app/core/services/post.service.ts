@@ -1,11 +1,8 @@
 import { AlertService } from 'wacom';
-import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { User } from '../interfaces/user.interface';
 import { HttpService } from './http.service';
 import {
 	ServerResponse,
-	ServerResponseError
 } from '../interfaces/server.interface';
 import { NewPost, Post } from '../interfaces/post.interface';
 

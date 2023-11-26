@@ -23,3 +23,16 @@
 		width: fit-content;
 	}
 }
+
+.info-message {
+	&_btns {
+		display: flex;
+		justify-content: center;
+		margin-top: 20px;
+		button {
+			&:not(:last-child) {
+				margin-right: 20px;
+			}
+		}
+	}
+}
