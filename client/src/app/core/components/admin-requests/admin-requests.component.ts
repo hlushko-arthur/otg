@@ -14,6 +14,8 @@ export class AdminRequestsComponent implements OnInit {
 
 	isShowAnswer = false;
 
+	tinymceContent = '';
+
 	tinyConfig = {};
 
 	constructor(private _rs: RequestService, public config: ConfigService) {
@@ -32,6 +34,10 @@ export class AdminRequestsComponent implements OnInit {
 		return this._rs.requests;
 	}
 
+	get statuses(): string[] {
+		return this._rs.statuses;
+	}
+
 	async deleteRequest(request: Request): Promise<void> {
 		await this._rs.delete(request)
 
@@ -39,11 +45,16 @@ export class AdminRequestsComponent implements OnInit {
 	}
 
 	changeRequestStatus(request: Request): void {
+		console.log(request.status);
+
+		request.status = Number(request.status) as 0 | 1 | 2;
+
 		this._rs.changeStatus(request);
 	}
 
 	sendAnswer(request: Request): void {
-
+		request.answer = this.tinymceContent;
+		this._rs.sendAnswer(request);
 	}
 
 	requestStatus(status: 0 | 1 | 2): string {

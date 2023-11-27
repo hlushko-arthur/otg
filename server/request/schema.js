@@ -6,7 +6,8 @@ const schema = mongoose.Schema({
 	text: String,
 	dateCreated: String,
 	author: String,
-	status: Number
+	status: Number,
+	answer: String
 }, {
 	minimize: false
 });

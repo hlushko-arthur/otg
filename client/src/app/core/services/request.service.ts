@@ -51,12 +51,19 @@ export class RequestService {
 	}
 
 	async changeStatus(request: Request): Promise<void> {
-		const newStatus = request.status === 0 ? 1 : 2;
 		await this._http.post('/api/request/changeStatus', {
 			_id: request._id,
-			status: newStatus
+			status: request.status
 		}).then((resp: ServerResponse) => {
-			request.status = newStatus;
+		})
+	}
+
+	async sendAnswer(request: Request): Promise<void> {
+		await this._http.post('/api/request/sendAnswer', {
+			_id: request._id,
+			answer: request.answer
+		}).then((resp: ServerResponse) => {
+
 		})
 	}
 

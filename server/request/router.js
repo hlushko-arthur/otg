@@ -86,6 +86,27 @@ module.exports = async waw => {
 		}
 	})
 
+	router.post('/sendAnswer', async (req, res) => {
+		try {
+			await verifyAccess(req, res);
+
+			const updatedRequest = await Request.updateOne({ _id: req.body._id }, {
+				answer: req.body.answer
+			});
+
+			if (updatedRequest.n === 0) {
+				return res.status(404).json({ status: false, message: 'Request not found' });
+			}
+
+			res.status(200).json({
+				status: true,
+				data: updatedRequest,
+			});
+		} catch (error) {
+			res.status(500).json({ status: false, message: error.message });
+		}
+	})
+
 	waw.use((req, res, next) => {
 		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
 		res.setHeader('Access-Control-Allow-Headers', 'Content-Type');

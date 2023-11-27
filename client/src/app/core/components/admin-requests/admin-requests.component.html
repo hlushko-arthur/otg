@@ -39,51 +39,54 @@
 					<div class="request_date">
 						{{activeRequest.dateCreated | dateFormat}}
 					</div>
-					<div
+					<!-- <div
 						[class._orange]="activeRequest.status === 1"
 						[class._green]="activeRequest.status === 2"
 						class="request_status"
 					>
 						{{requestStatus(activeRequest.status)}}
-					</div>
+					</div> -->
+
+					<select
+						[class._orange]="activeRequest.status === 1"
+						[class._green]="activeRequest.status === 2"
+						[(ngModel)]="activeRequest.status"
+						(ngModelChange)="changeRequestStatus(activeRequest)"
+						name=""
+						id=""
+					>
+						<option
+							*ngFor="let status of statuses; let i = index"
+							[value]="i"
+						>
+							{{status}}
+						</option>
+					</select>
 				</div>
 			</div>
 
-			<div class="request_actions">
-				<button
-					*ngIf="activeRequest.status !== 2"
-					(click)="changeRequestStatus(activeRequest)"
-					class="btn"
-				>
-					{{activeRequest.status === 0 ? 'На розгляд' : 'Завершити'}}
-				</button>
-
-				<button (click)="deleteRequest(activeRequest)" class="btn">
-					Видалити
-				</button>
-
-				<button (click)="isShowAnswer = !isShowAnswer" class="btn">
-					{{isShowAnswer ? 'Відмінити' : 'Відповісти'}}
-				</button>
-
-				<button
-					(click)="sendAnswer(activeRequest)"
-					*ngIf="isShowAnswer"
-					class="btn"
-				>
-					Надіслати відповідь
-				</button>
+			<div class="request_message-container">
+				<div class="title">Повідомлення</div>
+				<div class="request_message">{{activeRequest.text}}</div>
 			</div>
 
-			<div class="request_text-container">
-				<div class="request_text">{{activeRequest.text}}</div>
+			<div class="request_answer">
+				<div class="title">Відповідь</div>
+				<ng-container *ngIf="!activeRequest.answer">
+					<tinymce
+						[config]="tinyConfig"
+						[(ngModel)]="tinymceContent"
+						class="tinymce"
+					></tinymce>
+					<button (click)="sendAnswer(activeRequest)" class="btn">
+						Надіслати
+					</button>
+				</ng-container>
 
-				<div *ngIf="isShowAnswer" class="request_footer">
-					<tinymce [config]="tinyConfig" class="tinymce"></tinymce>
-				</div>
+				<ng-container *ngIf="activeRequest.answer">
+					<div [innerHTML]="activeRequest.answer"></div>
+				</ng-container>
 			</div>
-
-			<div class="request_footer"></div>
 		</div>
 	</div>
 </div>
