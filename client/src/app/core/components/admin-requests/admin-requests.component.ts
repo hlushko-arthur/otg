@@ -53,8 +53,7 @@ export class AdminRequestsComponent implements OnInit {
 	}
 
 	sendAnswer(request: Request): void {
-		request.answer = this.tinymceContent;
-		this._rs.sendAnswer(request);
+		this._rs.sendAnswer(request, this.tinymceContent);
 	}
 
 	requestStatus(status: 0 | 1 | 2): string {

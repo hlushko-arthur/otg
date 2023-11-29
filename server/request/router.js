@@ -1,8 +1,18 @@
 const Request = require('./schema');
 const mongoose = require('mongoose');
 const nJwt = require('njwt');
+const nodemailer = require("nodemailer");
 
 module.exports = async waw => {
+	const transporter = nodemailer.createTransport({
+		secure: waw.config.mail.secure,
+		service: 'Gmail',
+		auth: {
+			user: waw.config.mail.auth.user,
+			pass: waw.config.mail.auth.pass
+		}
+	});
+
 	if (!waw.config.signingKey) {
 		waw.config.signingKey = uuidv4();
 
@@ -90,6 +100,8 @@ module.exports = async waw => {
 		try {
 			await verifyAccess(req, res);
 
+			await sendEmail(req.body.email, req.body.answer);
+
 			const updatedRequest = await Request.updateOne({ _id: req.body._id }, {
 				answer: req.body.answer
 			});
@@ -103,6 +115,7 @@ module.exports = async waw => {
 				data: updatedRequest,
 			});
 		} catch (error) {
+			console.log('1111111111111', error);
 			res.status(500).json({ status: false, message: error.message });
 		}
 	})
@@ -146,6 +159,26 @@ module.exports = async waw => {
 			return true;
 		} else {
 			throw new Error('No Access');
+		}
+	}
+
+	const sendEmail = async (email, body) => {
+		try {
+			await new Promise((resolve, reject) => {
+				transporter.sendMail({
+					from: waw.config.mail.from,
+					subject: 'OTG | Відповідь на Ваше звернення',
+					to: email,
+					html: body
+				}, (resp) => {
+					if (resp instanceof Error) {
+						reject(resp.message);
+					}
+					resolve();
+				});
+			})
+		} catch (error) {
+			throw new Error(error.message || error || 'Failed to send email');
 		}
 	}
 };

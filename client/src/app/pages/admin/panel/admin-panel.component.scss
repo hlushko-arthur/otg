@@ -1,6 +1,7 @@
 header {
 	border-bottom: 1px solid black;
 	.nav {
+		display: flex;
 		&_item {
 			width: fit-content;
 			padding: 10px;

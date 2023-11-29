@@ -1,6 +1,7 @@
 export interface ServerResponse {
 	status: boolean;
 	data: object | [];
+	message?: string;
 }
 
 export interface ServerResponseError {

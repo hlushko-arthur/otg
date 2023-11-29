@@ -39,21 +39,12 @@
 					<div class="request_date">
 						{{activeRequest.dateCreated | dateFormat}}
 					</div>
-					<!-- <div
-						[class._orange]="activeRequest.status === 1"
-						[class._green]="activeRequest.status === 2"
-						class="request_status"
-					>
-						{{requestStatus(activeRequest.status)}}
-					</div> -->
 
 					<select
 						[class._orange]="activeRequest.status === 1"
 						[class._green]="activeRequest.status === 2"
 						[(ngModel)]="activeRequest.status"
 						(ngModelChange)="changeRequestStatus(activeRequest)"
-						name=""
-						id=""
 					>
 						<option
 							*ngFor="let status of statuses; let i = index"
