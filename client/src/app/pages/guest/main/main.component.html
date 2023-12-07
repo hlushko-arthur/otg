@@ -11,6 +11,7 @@
 
 		<div class="action-bar">
 			<div (click)="openSendRequestModal()">Надіслати звернення</div>
+			<div (click)="openAdministrativeServiceModal()">Адміністративні послуги</div>
 			<div *ngIf="!isAuthorized" routerLink="/sign">Увійти</div>
 			<div *ngIf="isAuthorized" (click)="logout()">Вийти</div>
 			<div *ngIf="isAdmin" routerLink="/admin">Панель адміна</div>

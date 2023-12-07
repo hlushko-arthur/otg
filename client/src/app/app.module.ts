@@ -18,6 +18,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { PostPanelComponent } from './core/components/post-panel/post-panel.component';
 import { AdminPanelComponent } from './pages/admin/panel/admin-panel.component';
 import { AdminRequestsComponent } from './core/components/admin-requests/admin-requests.component';
+import { CreateAdministrativeServiceComponent } from './core/modals/create-administrative-service/create-administrative-service.component';
 
 const routes: Routes = [{
 	path: '',
@@ -43,7 +44,8 @@ const routes: Routes = [{
 		CreateRequestComponent,
 		PhoneComponent,
 		AdminPanelComponent,
-		AdminRequestsComponent
+		AdminRequestsComponent,
+		CreateAdministrativeServiceComponent
 	],
 	imports: [
 		BrowserModule,
@@ -60,7 +62,8 @@ const routes: Routes = [{
 			modal: {
 				modals: {
 					createPost: CreatePostComponent,
-					createRequest: CreateRequestComponent
+					createRequest: CreateRequestComponent,
+					createAdministrativeService: CreateAdministrativeServiceComponent
 				}
 			}
 		}),

@@ -1,0 +1,47 @@
+<div class="modal-container">
+	<div class="modal-title">
+		<h1>Отримання адміністративних послуг</h1>
+	</div>
+
+	<div class="form">
+		<div
+			*ngIf="selectedService.id === undefined"
+			class="form_choose-service-container"
+		>
+			<h3>Оберіть послугу</h3>
+			<div class="form_choose-service">
+				<div class="form_choose-service_left">
+					<div
+						(click)="selectedCategory = category; clearSelectedService()"
+						[class._selected]="selectedCategory.id === category.id"
+						class="form_choose-service_item"
+						*ngFor="let category of config.administrativeServices"
+					>
+						{{category.title}}
+					</div>
+				</div>
+				<div class="form_choose-service_right">
+					<div
+						(click)="selectedService = service"
+						[class._selected]="selectedService.id === service.id"
+						class="form_choose-service_item"
+						*ngFor="let service of selectedCategory.children"
+					>
+						{{service.title}}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div *ngIf="selectedService.id !== undefined">
+			<div class="nav">
+				<div (click)="clearSelectedService()" class="btn">
+					Повернутися
+				</div>
+				<div>
+					{{selectedCategory.title}} > {{selectedService.title}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

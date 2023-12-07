@@ -21,6 +21,8 @@ export class MainComponent implements OnInit {
 		} else {
 			this._ps.get(this.tab);
 		}
+
+		this.openAdministrativeServiceModal();
 	}
 
 	setTab(tab: string): void {
@@ -30,7 +32,7 @@ export class MainComponent implements OnInit {
 			queryParams: {
 				tab: this.tab
 			}
-		})
+		});
 
 		this._ps.get(this.tab);
 	}
@@ -42,7 +44,13 @@ export class MainComponent implements OnInit {
 	openSendRequestModal(): void {
 		this._modal.open({
 			component: 'createRequest'
-		})
+		});
+	}
+
+	openAdministrativeServiceModal(): void {
+		this._modal.open({
+			component: 'createAdministrativeService'
+		});
 	}
 
 	get isAdmin(): boolean {
