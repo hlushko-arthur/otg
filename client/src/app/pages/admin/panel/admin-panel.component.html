@@ -9,10 +9,20 @@
 		>
 			Звернення
 		</div>
+		<div
+			[class.active]="activeTab === 'administrativeServices'"
+			(click)="activeTab = 'administrativeServices'"
+			class="nav_item"
+		>
+			Адміністративні послуги
+		</div>
 	</nav>
 </header>
 <main>
 	<div>
 		<admin-requests *ngIf="activeTab === 'requests'"></admin-requests>
+		<admin-administrative-services
+			*ngIf="activeTab === 'administrativeServices'"
+		></admin-administrative-services>
 	</div>
 </main>

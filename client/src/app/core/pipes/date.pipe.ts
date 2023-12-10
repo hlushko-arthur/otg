@@ -7,6 +7,7 @@ import * as moment from 'moment';
 export class DateFormatPipe implements PipeTransform {
 	transform(value: string): string {
 		moment.locale('uk');
+
 		return moment(value).format('D MMMM, YYYY');
 	}
 }

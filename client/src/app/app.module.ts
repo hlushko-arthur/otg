@@ -19,6 +19,7 @@ import { PostPanelComponent } from './core/components/post-panel/post-panel.comp
 import { AdminPanelComponent } from './pages/admin/panel/admin-panel.component';
 import { AdminRequestsComponent } from './core/components/admin-requests/admin-requests.component';
 import { CreateAdministrativeServiceComponent } from './core/modals/create-administrative-service/create-administrative-service.component';
+import { AdminAdministrativeServicesComponent } from './core/components/admin-administrative-services/admin-administrative-services.component';
 
 const routes: Routes = [{
 	path: '',
@@ -45,7 +46,8 @@ const routes: Routes = [{
 		PhoneComponent,
 		AdminPanelComponent,
 		AdminRequestsComponent,
-		CreateAdministrativeServiceComponent
+		CreateAdministrativeServiceComponent,
+		AdminAdministrativeServicesComponent
 	],
 	imports: [
 		BrowserModule,

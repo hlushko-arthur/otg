@@ -1,0 +1,9 @@
+{
+	"priority": 800,
+	"name": "AdministrativeService",
+	"router": "router.js",
+	"dependencies": {
+		"njwt": "*",
+		"nodemailer": "*"
+	}
+}

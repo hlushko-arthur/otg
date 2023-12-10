@@ -21,8 +21,6 @@ export class MainComponent implements OnInit {
 		} else {
 			this._ps.get(this.tab);
 		}
-
-		this.openAdministrativeServiceModal();
 	}
 
 	setTab(tab: string): void {

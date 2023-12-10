@@ -1,0 +1,96 @@
+<div class="requests-container">
+	<div class="left-block">
+		<div
+			(click)="activeAdministrativeService = administrativeService"
+			[class.active]="activeAdministrativeService._id === administrativeService._id"
+			class="request-item"
+			*ngFor="let administrativeService of administrativeServices"
+		>
+			<div class="request-item_name">
+				{{administrativeService.fullName}}
+			</div>
+
+			<div class="request-item_footer">
+				<div class="request-item_date">
+					{{administrativeService.dateCreated | dateFormat}}
+				</div>
+
+				<div
+					[class._orange]="administrativeService.status === 1"
+					[class._green]="administrativeService.status === 2"
+					class="request-item_status"
+				>
+					{{administrativeServiceStatus(administrativeService.status)}}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="right-block">
+		<div *ngIf="activeAdministrativeService._id" class="request">
+			<div class="request_header">
+				<div class="request_name">
+					<div>
+						{{activeAdministrativeService.fullName}},
+						{{activeAdministrativeService.birthday | dateFormat}}
+					</div>
+
+					<div>
+						<div>{{activeAdministrativeService.email}}</div>
+
+						<div>, {{activeAdministrativeService.phone}}</div>
+					</div>
+				</div>
+				<div>
+					<div class="request_date">
+						{{activeAdministrativeService.dateCreated | dateFormat}}
+					</div>
+
+					<select
+						[class._orange]="activeAdministrativeService.status === 1"
+						[class._green]="activeAdministrativeService.status === 2"
+						[(ngModel)]="activeAdministrativeService.status"
+						(ngModelChange)="changeAdministrativeServiceStatus(activeAdministrativeService)"
+					>
+						<option
+							*ngFor="let status of statuses; let i = index"
+							[value]="i"
+						>
+							{{status}}
+						</option>
+					</select>
+				</div>
+			</div>
+
+			<div
+				*ngIf="!activeAdministrativeService.extract"
+				class="request_message-container"
+			>
+				<div class="title">Повідомлення</div>
+				<div class="request_message">
+					{{activeAdministrativeService.text}}
+				</div>
+			</div>
+
+			<div class="request_answer">
+				<div class="title">Відповідь</div>
+				<ng-container *ngIf="!activeAdministrativeService.answer">
+					<tinymce
+						[config]="tinyConfig"
+						[(ngModel)]="tinymceContent"
+						class="tinymce"
+					></tinymce>
+					<button
+						(click)="sendAnswer(activeAdministrativeService)"
+						class="btn"
+					>
+						Надіслати
+					</button>
+				</ng-container>
+
+				<ng-container *ngIf="activeAdministrativeService.answer">
+					<div [innerHTML]="activeAdministrativeService.answer"></div>
+				</ng-container>
+			</div>
+		</div>
+	</div>
+</div>

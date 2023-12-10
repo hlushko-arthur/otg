@@ -1,0 +1,118 @@
+.requests-container {
+	display: flex;
+}
+
+.left-block {
+	width: 300px;
+	border-right: 1px solid black;
+}
+
+.right-block {
+	width: calc(100% - 300px);
+}
+
+.request-item {
+	transition: 0.2s;
+	cursor: pointer;
+	padding: 5px;
+	border-bottom: 1px solid black;
+	&_name {
+		color: black;
+	}
+	&_date {
+		font-size: 11px;
+		color: rgba(0, 0, 0, 0.5);
+	}
+	&_footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: end;
+	}
+}
+
+.active {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.request {
+	height: 100%;
+	&_header {
+		border-bottom: 1px solid black;
+		height: 70px;
+		padding: 5px;
+		display: flex;
+		justify-content: space-between;
+		div {
+			&:last-child {
+				align-items: end;
+				display: flex;
+				flex-direction: column;
+				min-width: fit-content;
+				justify-content: space-between;
+			}
+		}
+	}
+	&_name {
+		color: black;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: start;
+		width: 100%;
+		div {
+			&:last-child {
+				font-size: 14px;
+				display: flex;
+				width: 100%;
+				justify-content: start;
+				flex-direction: row;
+			}
+		}
+	}
+	&_actions {
+		padding: 5px;
+		border-bottom: 1px solid black;
+		button {
+			&:not(:last-child) {
+				margin-right: 10px;
+			}
+		}
+	}
+	&_date {
+		font-size: 11px;
+		color: rgba(0, 0, 0, 0.5);
+	}
+
+	&_message-container {
+		display: flex;
+		padding: 5px;
+		flex-direction: column;
+		justify-content: space-between;
+		border-bottom: 1px solid black;
+	}
+
+	&_answer {
+		padding: 5px;
+		display: flex;
+		flex-direction: column;
+		button {
+			margin-top: 10px;
+			align-self: self-end;
+			justify-self: self-end;
+		}
+	}
+}
+
+._orange {
+	color: orange;
+}
+
+._green {
+	color: green;
+}
+
+.title {
+	color: black;
+	font-weight: bold;
+	font-size: 13px;
+}

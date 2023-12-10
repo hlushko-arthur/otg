@@ -3,7 +3,7 @@
 		<h1>Отримання адміністративних послуг</h1>
 	</div>
 
-	<div class="form">
+	<div *ngIf="!isAdministrativeServiceSent" class="form">
 		<div
 			*ngIf="selectedService.id === undefined"
 			class="form_choose-service-container"
@@ -42,6 +42,69 @@
 					{{selectedCategory.title}} > {{selectedService.title}}
 				</div>
 			</div>
+
+			<div class="form-send">
+				<div class="form-send_field">
+					<span>Прізвище, ім'я, по-батькові</span>
+					<input
+						[(ngModel)]="form.fullName"
+						class="input"
+						type="text"
+					/>
+				</div>
+				<div class="form-send_field">
+					<span>Email</span>
+					<input [(ngModel)]="form.email" class="input" type="text" />
+				</div>
+				<div class="form-send_field">
+					<phone label="Телефон" [(phone)]="form.phone"></phone>
+				</div>
+				<div class="form-send_field">
+					<span>Дата народження</span>
+					<input
+						[(ngModel)]="form.birthday"
+						class="input"
+						type="date"
+					/>
+				</div>
+
+				<ng-container *ngIf="!selectedService.extract">
+					<div class="form-send_field">
+						<span>Зміст</span>
+						<textarea
+							[(ngModel)]="form.text"
+							class="input"
+							cols="30"
+							rows="10"
+						></textarea>
+					</div>
+					<!-- <div class="form-send_field">
+						<span>Email</span>
+						<input [(ngModel)]="form.email" class="input" type="text" />
+					</div> -->
+				</ng-container>
+
+				<div class="form-send_field">
+					<button
+						(click)="createAdministrativeService()"
+						[disabled]="isButtonDisabled"
+						class="btn"
+					>
+						Надіслати запит
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div *ngIf="isAdministrativeServiceSent" class="info-message">
+		<h3>Ваш запит успішно відправлено</h3>
+		<div>
+			<div>Очікуйте відповіді на вказаний email</div>
+		</div>
+
+		<div class="info-message_btns">
+			<button (click)="close()" class="btn">Закрити</button>
 		</div>
 	</div>
 </div>
